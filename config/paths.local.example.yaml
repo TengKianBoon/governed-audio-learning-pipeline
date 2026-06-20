@@ -1,0 +1,45 @@
+# Copy this file to config/paths.local.yaml, then edit the paths.
+# paths.local.yaml is ignored by Git so private machine paths stay private.
+
+sandbox_root: "../../AI Learnings Audio App"
+portfolio_owner: "Teng Kian Boon"
+portfolio_initials: "TKB"
+portfolio_tagline: "Enterprise AI solutions architecturing and framework built with OpenAI-assisted synthesis, operator review, cost controls, and privacy-preserving publishing."
+
+# Paste real paths here after locating ffmpeg.exe and ffprobe.exe.
+ffmpeg_path: "C:/path/to/ffmpeg.exe"
+ffprobe_path: "C:/path/to/ffprobe.exe"
+
+# If using a local virtual environment, this will usually be:
+# whisper_command: ".venv/Scripts/whisper.exe"
+whisper_command: ".venv/Scripts/whisper.exe"
+
+# Beginner first real test: use base so downloads/runs are smaller.
+# Later upgrade to small/medium for quality.
+whisper_model: "base"
+translation_model: "base"
+
+# OpenAI quality layer. Keep the actual API key outside this file.
+# In PowerShell, run .\scripts\set-openai-key-user.ps1 for daily use,
+# or use Read-Host -AsSecureString for one-session use.
+# Do not paste the actual key into this file.
+translation_provider: "openai-responses"
+summary_provider: "openai-responses"
+generate_full_english_transcript: false
+auto_apply_mindmap_delta: true
+openai_api_key_env: "OPENAI_API_KEY"
+openai_translation_model: "gpt-5.4-mini"
+openai_translation_reasoning_effort: "low"
+openai_translation_max_output_tokens: 6000
+openai_summary_model: "gpt-5.4-mini"
+openai_summary_reasoning_effort: "high"
+openai_summary_max_output_tokens: 20000
+openai_quality_model: "gpt-5.4-mini"
+openai_reasoning_effort: "high"
+openai_max_output_tokens: 20000
+openai_request_timeout_seconds: 180
+
+max_retries: 3
+retry_backoff_seconds: 1
+per_task_token_budget: 20000
+daily_token_budget: 100000

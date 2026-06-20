@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "python .claude/hooks/block_protected_paths.py" }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "python .claude/hooks/guard_command.py" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "python .claude/hooks/run_checks.py" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      { "hooks": [ { "type": "command", "command": "python .claude/hooks/verify_score.py" } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "python .claude/hooks/verify_score.py" } ] }
+    ]
+  }
+}

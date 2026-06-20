@@ -1,0 +1,19 @@
+{
+  "score": 100,
+  "passed": true,
+  "checks": {
+    "source_metadata": true,
+    "original_transcript": true,
+    "english_transcript": true,
+    "summary": true,
+    "mindmap_ingest": true,
+    "mindmap_delta": true,
+    "cost_budget": true
+  },
+  "privacy_clear": true,
+  "privacy_findings": [],
+  "transcript_quality_clear": true,
+  "transcript_findings": [],
+  "summary_quality_clear": true,
+  "summary_findings": []
+}

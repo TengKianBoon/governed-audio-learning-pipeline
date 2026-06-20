@@ -1,0 +1,18 @@
+{
+  "input_kind": "audio_video",
+  "source_extension": ".m4a",
+  "duration_seconds": 397.860458,
+  "detected_language": "zh",
+  "translation_status": "skipped_full_translation_summary_direct",
+  "generate_full_english_transcript": false,
+  "summary_input_artifact": "private transcript artifact withheld",
+  "summary_provider": "openai-responses",
+  "openai_translation_model": "gpt-5.4-mini",
+  "openai_translation_reasoning_effort": "low",
+  "openai_summary_model": "gpt-5.4-mini",
+  "openai_summary_reasoning_effort": "high",
+  "mindmap_source": "summary.md + mindmap_ingest.md",
+  "mindmap_cost": "zero; local rule-based update from summary-level text",
+  "processed_at": "2026-06-20T09:41:39+00:00",
+  "privacy": "raw source and full transcripts withheld"
+}

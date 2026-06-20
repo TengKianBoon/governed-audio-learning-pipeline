@@ -1,0 +1,38 @@
+# Public-safe default config. Override with config/paths.local.yaml for private machine values.
+sandbox_root: "../../AI Learnings Audio App"
+portfolio_owner: "Teng Kian Boon"
+portfolio_initials: "TKB"
+portfolio_tagline: "Enterprise AI solutions architecturing and framework built with OpenAI-assisted synthesis, operator review, cost controls, and privacy-preserving publishing."
+ffmpeg_path: ""
+ffprobe_path: ""
+whisper_command: "whisper"
+whisper_model: "small"
+translation_model: "medium"
+storage_provider: "local-filesystem"
+transcription_provider: "local-whisper-compatible-cli"
+translation_provider: "openai-responses"
+summary_provider: "openai-responses"
+research_provider: "none-until-approved"
+generate_full_english_transcript: false
+auto_apply_mindmap_delta: true
+openai_api_key_env: "OPENAI_API_KEY"
+openai_translation_model: "gpt-5.4-mini"
+openai_translation_reasoning_effort: "low"
+openai_translation_max_output_tokens: 6000
+openai_summary_model: "gpt-5.4-mini"
+openai_summary_reasoning_effort: "high"
+openai_summary_max_output_tokens: 20000
+openai_quality_model: "gpt-5.4-mini"
+openai_reasoning_effort: "high"
+openai_max_output_tokens: 20000
+openai_request_timeout_seconds: 180
+short_file_limit_seconds: 1200
+chunk_seconds: 600
+chunk_overlap_seconds: 15
+file_stability_checks: 2
+file_stability_interval_seconds: 2
+max_retries: 3
+retry_backoff_seconds: 1
+daily_token_budget: 100000
+per_task_token_budget: 20000
+budget_warning_ratio: 0.8

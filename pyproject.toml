@@ -1,0 +1,10 @@
+[project]
+name = "enterprise-ai-learning-audio-app"
+version = "0.1.0"
+description = "Local-first audio learning pipeline for enterprise AI study notes."
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

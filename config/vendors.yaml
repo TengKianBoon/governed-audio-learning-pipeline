@@ -1,0 +1,25 @@
+# Seed registry for later research reports. Expand only after transcription MVP is stable.
+vendors:
+  - OpenAI
+  - Anthropic
+  - Microsoft
+  - Google Cloud
+  - AWS
+  - Oracle
+  - SAP
+  - Salesforce
+  - ServiceNow
+  - Palantir
+  - Databricks
+  - Snowflake
+  - NVIDIA
+  - IBM
+  - Accenture
+  - Deloitte
+  - Cohere
+  - Mistral AI
+  - Hugging Face
+  - LangChain
+  - Cursor
+ecosystems:
+  - Y Combinator

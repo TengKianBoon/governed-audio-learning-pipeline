@@ -1,0 +1,9 @@
+minimum_score: 80
+weights:
+  source_metadata: 15
+  original_transcript: 20
+  english_transcript: 25
+  summary: 15
+  mindmap_delta: 10
+  cost_budget: 5
+  privacy_gate: 10
