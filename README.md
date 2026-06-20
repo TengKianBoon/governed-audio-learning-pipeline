@@ -1,10 +1,10 @@
-# Enterprise AI Learning Audio App
+# Enterprise AI Solutions Architecturing and Framework
 
-Pipeline for turning Chinese and English voice recordings, local YouTube videos, or phone-generated `.txt` transcripts into learning artifacts:
+Local-first implementation of an Enterprise AI solutions architecture learning system. The app turns Chinese and English voice recordings, local YouTube videos, or phone-generated `.txt` transcripts into governed learning artifacts:
 
 - original-language transcript
-- English markdown transcript
-- OpenAI GPT quality summary and quality score
+- optional English markdown transcript
+- OpenAI quality summary and quality score
 - mindmap delta review
 - sanitized public-review package
 
@@ -83,7 +83,7 @@ incoming audio/video/text transcript
   -> if media: ffmpeg normalize + Whisper transcribe + chunk/stitch when needed
   -> if text: read transcript directly
   -> detect English vs Chinese
-  -> default: OpenAI gpt-5.4-mini summarizes directly from source transcript in English
+  -> default: configured OpenAI quality model summarizes directly from source transcript in English
   -> optional: generate a full English transcript only when explicitly enabled
   -> mindmap ingest suggestion from the refined summary
   -> quality score + zero-cost local mindmap delta from summary-level text
@@ -111,7 +111,7 @@ That folder is intended to live inside the public code repo so GitHub can show:
 - the latest portfolio-safe Enterprise AI solutions framework map
 - sanitized review packages
 - visible progress over time through normal Git history
-- mindmap snapshots under `portfolio_public/mindmap/history/`
+- current framework map and curated package history through normal Git commits
 
 ## Public Exhibit Gate
 
@@ -143,12 +143,12 @@ See `docs/github-showcase-standard.md` for the reusable checklist and maturity l
 
 ## Portfolio Positioning
 
-This project is intentionally built to signal level-7.5 engineering judgment: not just prompting, not over-engineered platform theater, but a controlled Enterprise AI solutions architecture framework with real governance.
+This project is intentionally built to signal applied enterprise AI engineering judgment: not just prompting, not platform theater, but a controlled Enterprise AI solutions architecture framework with real governance.
 
 It demonstrates:
 
 - MCP-ready tool orchestration with CLI as a fallback
-- OpenAI gpt-5.4-mini high-reasoning learning synthesis, with optional full transcript translation
+- configurable OpenAI high-reasoning learning synthesis, with optional full transcript translation
 - local Whisper-compatible transcription
 - agent contracts before agent work
 - maker/checker separation
