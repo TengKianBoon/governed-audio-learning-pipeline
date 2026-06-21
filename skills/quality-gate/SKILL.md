@@ -1,6 +1,6 @@
 ---
 name: quality-gate
-description: Score and verify Enterprise AI Learning Audio App outputs. Use when checking source metadata, transcript completeness, English transcript quality, mindmap delta, privacy gates, and score threshold before marking work done.
+description: Score and verify Governed Audio Learning Pipeline outputs. Use when checking source metadata, transcript completeness, English transcript quality, mindmap delta, privacy gates, and score threshold before marking work done.
 ---
 
 # Quality Gate

@@ -5,7 +5,7 @@ Use this after the mock pipeline works. This setup keeps raw learning files priv
 ## Step 1 - Open The App Folder
 
 ```powershell
-cd "C:\Leon G Drive\A Daily Routine\AI Learnings\enterprise-ai-learning-audio-app"
+cd "C:\Leon G Drive\A Daily Routine\AI Learnings\governed-audio-learning-pipeline"
 ```
 
 ## Step 2 - Create A Private Local Config

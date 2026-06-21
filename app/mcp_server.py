@@ -12,7 +12,7 @@ def create_server():
             "install the MCP SDK later to run this adapter."
         ) from exc
 
-    server = FastMCP("enterprise-ai-learning-audio-app")
+    server = FastMCP("governed-audio-learning-pipeline")
 
     @server.tool()
     def process_learning_audio(input_path: str, config_path: str | None = None, mock: bool = False, mock_duration_seconds: float | None = None, archive_after_success: bool = False) -> dict:

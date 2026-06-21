@@ -45,7 +45,7 @@
 ## 2026-06-20 - Continuous Mindmap Update
 
 - Did: made passed learning packages auto-apply their mindmap deltas to the private learning graph; `publish --sanitize` now refreshes public mindmap links after sanitized packages exist.
-- Why notable: the Enterprise AI solutions framework map now grows over time as new knowledge feeds are processed, while public links remain gated by the sanitizer.
+- Why notable: the Enterprise AI architecture and delivery framework map now grows over time as new knowledge feeds are processed, while public links remain gated by the sanitizer.
 - Decisions: failed or incomplete packages do not auto-add to the graph; public portfolio links appear only after sanitized publishing.
 - Next: use `mindmap --apply-reviewed` only as a backfill/repair command for older packages.
 
@@ -55,3 +55,24 @@
 - Why notable: future apps can be presented consistently through architecture, tests, ADRs, build journal, privacy gates, and curated public demo artifacts.
 - Decisions: public profile readiness is evidence-led; only polished Level 3 projects should be pinned, while earlier public-safe work can remain visible as progress.
 - Next: use this standard before publishing or pinning each new app.
+
+## 2026-06-20 - HTML Summary and NotebookLM Handoff
+
+- Did: added `summary.html`, web-research checklists, 5 to 10 minute podcast scripts, and a `notebooklm_package/` for each processed learning.
+- Why notable: each learning can now move from transcript-derived synthesis toward vendor-verified research and multimedia learning artifacts without exposing raw private transcripts.
+- Decisions: NotebookLM stays human-in-the-loop for now; the app prepares upload-ready prompts and source bundles instead of assuming stable automatic NotebookLM control.
+- Next: run a fresh audio or `.txt` file, open `summary.html`, click the research checklist, and inspect the NotebookLM handoff folder before public publishing.
+
+## 2026-06-20 - Paid Research Enrichment Gate
+
+- Did: added `research --enrich --latest` to turn a private summary into a web-search-backed research report with citations, evidence table, richer examples, status JSON, and a research-enriched podcast script.
+- Why notable: public learning can now be upgraded from transcript-derived synthesis into an evidence-backed enterprise AI architecture and delivery report.
+- Decisions: enrichment is not automatic; it uses OpenAI web search only when the operator deliberately chooses to spend tokens and tool cost.
+- Next: run one mock enrichment, then one real enrichment on a selected learning and inspect `research_enrichment_status.json` before publishing.
+
+## 2026-06-21 - NotebookLM Source Export Folder
+
+- Did: added automatic private export to `AI Learning Artifacts Gen NotebookLM`, plus `notebooklm --export --latest` for backfilling older learning packages.
+- Why notable: NotebookLM now receives exactly the operator-approved source set: original transcript, Markdown summary, and HTML summary.
+- Decisions: the NotebookLM source export is private and separate from public GitHub output.
+- Next: process one new file and confirm a `{slug} NLM` folder appears with the three source files.

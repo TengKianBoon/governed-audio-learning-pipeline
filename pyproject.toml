@@ -1,7 +1,7 @@
 [project]
-name = "enterprise-ai-learning-audio-app"
+name = "governed-audio-learning-pipeline"
 version = "0.1.0"
-description = "Local-first audio learning pipeline for enterprise AI study notes."
+description = "Local-first pipeline turning spoken content into governed knowledge artifacts."
 requires-python = ">=3.10"
 readme = "README.md"
 

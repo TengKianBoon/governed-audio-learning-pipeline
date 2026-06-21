@@ -45,6 +45,7 @@ def read_simple_yaml(path: Path) -> dict:
 class AppConfig:
     sandbox_root: Path
     portfolio_public_root: Path
+    notebooklm_artifacts_root: Path
     portfolio_owner: str
     portfolio_initials: str
     portfolio_tagline: str
@@ -70,6 +71,12 @@ class AppConfig:
     openai_summary_model: str
     openai_summary_reasoning_effort: str
     openai_summary_max_output_tokens: int
+    openai_research_model: str
+    openai_research_reasoning_effort: str
+    openai_research_max_output_tokens: int
+    openai_research_search_context_size: str
+    openai_research_return_token_budget: str
+    openai_research_allowed_domains: str
     openai_request_timeout_seconds: int
     short_file_limit_seconds: int
     chunk_seconds: int
@@ -177,16 +184,23 @@ def load_config(config_path: str | Path | None = None) -> AppConfig:
     summary_model_name = str(merged.get("openai_summary_model", legacy_quality_model))
     summary_reasoning_effort = str(merged.get("openai_summary_reasoning_effort", legacy_reasoning_effort))
     summary_max_output_tokens = int(merged.get("openai_summary_max_output_tokens", legacy_max_output_tokens))
+    research_model_name = str(merged.get("openai_research_model", summary_model_name))
+    research_reasoning_effort = str(merged.get("openai_research_reasoning_effort", summary_reasoning_effort))
+    research_max_output_tokens = int(merged.get("openai_research_max_output_tokens", 9000))
 
     return AppConfig(
         sandbox_root=sandbox_root,
         portfolio_public_root=resolve_path(str(merged.get("portfolio_public_root", "portfolio_public")), root),
+        notebooklm_artifacts_root=resolve_path(
+            str(merged.get("notebooklm_artifacts_root", "../../AI Learning Artifacts Gen NotebookLM")),
+            root,
+        ),
         portfolio_owner=str(merged.get("portfolio_owner", "Teng Kian Boon")),
         portfolio_initials=str(merged.get("portfolio_initials", "TKB")),
         portfolio_tagline=str(
             merged.get(
                 "portfolio_tagline",
-                "Enterprise AI solutions architecturing and framework built with OpenAI-assisted synthesis, operator review, cost controls, and privacy-preserving publishing.",
+                "Enterprise AI solution architecture and delivery framework built with OpenAI-assisted synthesis, operator review, cost controls, and privacy-preserving publishing.",
             )
         ),
         ffmpeg_path=resolve_executable(str(merged.get("ffmpeg_path", "")), "ffmpeg"),
@@ -211,6 +225,17 @@ def load_config(config_path: str | Path | None = None) -> AppConfig:
         openai_summary_model=summary_model_name,
         openai_summary_reasoning_effort=summary_reasoning_effort,
         openai_summary_max_output_tokens=summary_max_output_tokens,
+        openai_research_model=research_model_name,
+        openai_research_reasoning_effort=research_reasoning_effort,
+        openai_research_max_output_tokens=research_max_output_tokens,
+        openai_research_search_context_size=str(merged.get("openai_research_search_context_size", "medium")),
+        openai_research_return_token_budget=str(merged.get("openai_research_return_token_budget", "default")),
+        openai_research_allowed_domains=str(
+            merged.get(
+                "openai_research_allowed_domains",
+                "openai.com,anthropic.com,microsoft.com,google.com,googlecloud.com,cloud.google.com,aws.amazon.com,oracle.com,sap.com,salesforce.com,servicenow.com,palantir.com,databricks.com,snowflake.com,nvidia.com,ibm.com,accenture.com,deloitte.com,cohere.com,mistral.ai,huggingface.co,langchain.com,cursor.com,ycombinator.com",
+            )
+        ),
         openai_request_timeout_seconds=int(merged.get("openai_request_timeout_seconds", 180)),
         short_file_limit_seconds=int(merged.get("short_file_limit_seconds", 1200)),
         chunk_seconds=int(merged.get("chunk_seconds", 600)),

@@ -1,6 +1,6 @@
 ---
 name: translate-transcript
-description: Translate original-language learning transcripts into English markdown for the Enterprise AI Learning Audio App. Use when converting Chinese/English transcripts into english_transcribed.md while preserving technical terms and uncertainty notes.
+description: Translate original-language learning transcripts into English markdown for the Governed Audio Learning Pipeline. Use when converting Chinese/English transcripts into english_transcribed.md while preserving technical terms and uncertainty notes.
 ---
 
 # Translate Transcript

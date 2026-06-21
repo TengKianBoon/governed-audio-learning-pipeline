@@ -36,7 +36,7 @@ class MindmapFlowTest(unittest.TestCase):
             render_mindmap_html(graph, output)
             html = output.read_text(encoding="utf-8")
 
-        self.assertIn("Enterprise AI Solutions Architecturing and Framework", html)
+        self.assertIn("Enterprise AI Solution Architecture &amp; Delivery Framework", html)
         self.assertIn("Application Design", html)
         self.assertIn("Agentic System Improvement", html)
         self.assertIn("Agent Package", html)

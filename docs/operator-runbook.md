@@ -4,7 +4,7 @@ This runbook is intentionally easy to follow, but it is not positioned as a begi
 
 ## Positioning
 
-Target public signal: **level 7.5/10 enterprise AI builder**.
+Target public signal: **mid-to-senior enterprise AI builder**.
 
 What this should demonstrate:
 
@@ -23,7 +23,7 @@ For duplicate handling, retention, and cleanup policy, see `docs/learning-lifecy
 1. Open the app code folder:
 
 ```powershell
-cd "C:\Leon G Drive\A Daily Routine\AI Learnings\enterprise-ai-learning-audio-app"
+cd "C:\Leon G Drive\A Daily Routine\AI Learnings\governed-audio-learning-pipeline"
 ```
 
 2. Check readiness:
@@ -156,7 +156,7 @@ This reports cleanup candidates only. It does not delete files.
 12. Open the repo-side public exhibit:
 
 ```powershell
-explorer "C:\Leon G Drive\A Daily Routine\AI Learnings\enterprise-ai-learning-audio-app\portfolio_public"
+explorer "C:\Leon G Drive\A Daily Routine\AI Learnings\governed-audio-learning-pipeline\portfolio_public"
 ```
 
 ## Quality Gates

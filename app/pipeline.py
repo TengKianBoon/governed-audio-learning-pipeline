@@ -7,6 +7,7 @@ import shutil
 from .config import AppConfig, ensure_sandbox_dirs, load_config
 from .cost_guard import budget_report, write_budget_report
 from .language import detect_language, is_english_language
+from .learning_delivery import write_learning_delivery_artifacts
 from .media import (
     build_chunk_plan,
     is_supported_input,
@@ -18,6 +19,7 @@ from .media import (
 )
 from .mindmap import apply_delta, evaluate_delta, load_graph, render_mindmap_html, save_graph
 from .models import ProcessingResult, TranscriptionResult
+from .notebooklm_export import export_notebooklm_sources
 from .openai_quality import build_quality_summary, extract_mindmap_ingest_suggestion, translate_to_english
 from .quality import write_quality_score
 from .registry import update_learning_registry, update_processed_registry
@@ -255,11 +257,19 @@ def process_file(
         "processed_at": utc_now_iso(),
         "privacy": "private raw source and full transcripts",
     }
-    (package_dir / "source_metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
     write_text(package_dir / "original_transcript.md", f"# Original Transcript\n\n{original_transcript}")
     write_text(package_dir / "english_transcribed.md", f"# English Transcript\n\n{english_transcript}")
     write_text(package_dir / "summary.md", summary_text)
     write_text(package_dir / "mindmap_ingest.md", f"# Mindmap Ingest Suggestion\n\n{mindmap_ingest_suggestion}\n")
+    metadata["delivery_artifacts"] = write_learning_delivery_artifacts(
+        package_dir,
+        summary_text=summary_text,
+        source_name=source.name,
+        slug=slug,
+        mindmap_ingest_suggestion=mindmap_ingest_suggestion,
+    )
+    metadata["notebooklm_source_export"] = export_notebooklm_sources(package_dir, config)
+    (package_dir / "source_metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
     write_budget_report(
         package_dir / "cost_budget.json",
         budget_report(

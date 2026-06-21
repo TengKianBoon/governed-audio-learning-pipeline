@@ -1,6 +1,6 @@
 # AGENTS.md - Project Constitution
 
-This file is the standing context for agents working on the Enterprise AI Learning Audio App.
+This file is the standing context for agents working on the Governed Audio Learning Pipeline.
 
 ## What This Is
 
@@ -34,4 +34,4 @@ If one audio file cannot be processed end to end, do not add another agent or au
 
 ## Portfolio Posture
 
-This should read publicly as a mid-to-senior Enterprise AI solutions architecturing and framework project by Teng Kian Boon: OpenAI-assisted, human-reviewed, cost-aware, and privacy-preserving. Do not frame the project as "made by ChatGPT" or as an unreviewed automation demo.
+This should read publicly as a mid-to-senior Enterprise AI solution architecture and delivery framework project by Teng Kian Boon: OpenAI-assisted, human-reviewed, cost-aware, and privacy-preserving. Do not frame the project as "made by ChatGPT" or as an unreviewed automation demo.

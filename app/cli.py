@@ -11,12 +11,14 @@ from .mcp_tools import call_tool, tool_schemas
 from .openai_quality import OpenAIQualityError
 from .pipeline import PipelineError
 from .publishing import PublishingGateError
+from .notebooklm_export import NotebookLMExportError
+from .research_enrichment import ResearchEnrichmentError
 from .transcription import TranscriptionDependencyError
 from .watcher import watch_folder
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Enterprise AI Learning Audio App")
+    parser = argparse.ArgumentParser(description="Governed Audio Learning Pipeline")
     parser.add_argument("--config", dest="global_config", help="Optional config file path.")
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--config", dest="config", help="Optional config file path.")
@@ -36,6 +38,7 @@ def build_parser() -> argparse.ArgumentParser:
     watch.add_argument("--folder", required=True, help="Folder to watch.")
     watch.add_argument("--once", action="store_true", help="Process once and exit.")
     watch.add_argument("--mock", action="store_true", help="Run without FFmpeg/Whisper for testing.")
+    watch.add_argument("--no-archive", action="store_true", help="Leave successfully processed files in the watched folder.")
 
     mindmap = subparsers.add_parser("mindmap", parents=[common], help="Review the mindmap delta for private outputs.")
     mindmap.add_argument("--review", action="store_true", help="Create review from existing private outputs.")
@@ -60,6 +63,17 @@ def build_parser() -> argparse.ArgumentParser:
     clean.add_argument("--dry-run", action="store_true", help="Report cleanup candidates without deleting anything.")
     clean.add_argument("--processing-days", type=int, default=14, help="Report processing files at least this many days old.")
     clean.add_argument("--archive-mb", type=int, default=500, help="Report archived files at least this many MB.")
+
+    research = subparsers.add_parser("research", parents=[common], help="Create a cited web-research enrichment report.")
+    research.add_argument("--enrich", action="store_true", help="Use OpenAI web_search to enrich one learning summary.")
+    research.add_argument("--latest", action="store_true", help="Enrich the newest private learning package.")
+    research.add_argument("--package", dest="package_path", help="Path to a private learning package folder.")
+    research.add_argument("--mock", action="store_true", help="Create a mock research report without an OpenAI call.")
+
+    notebooklm = subparsers.add_parser("notebooklm", parents=[common], help="Prepare NotebookLM source handoff folders.")
+    notebooklm.add_argument("--export", action="store_true", help="Copy source files into the NotebookLM artifacts folder.")
+    notebooklm.add_argument("--latest", action="store_true", help="Export the newest private learning package.")
+    notebooklm.add_argument("--package", dest="package_path", help="Path to a private learning package folder.")
 
     return parser
 
@@ -110,7 +124,7 @@ def cmd_process_latest(args: argparse.Namespace) -> int:
 def cmd_watch(args: argparse.Namespace) -> int:
     config = load_config(config_path(args))
     ensure_sandbox_dirs(config)
-    watch_folder(Path(args.folder), config, once=args.once, mock=args.mock)
+    watch_folder(Path(args.folder), config, once=args.once, mock=args.mock, archive_after_success=not args.no_archive)
     return 0
 
 
@@ -185,6 +199,35 @@ def cmd_clean(args: argparse.Namespace) -> int:
     return 1
 
 
+def cmd_research(args: argparse.Namespace) -> int:
+    if args.enrich:
+        payload = {
+            "config_path": config_path(args),
+            "mock": args.mock,
+        }
+        if args.package_path:
+            payload["package_path"] = args.package_path
+        if args.latest:
+            payload["latest"] = True
+        print(json.dumps(call_tool("enrich_learning_research", payload), indent=2))
+        return 0
+    print(json.dumps({"error": "Choose --enrich with --latest or --package <folder>."}, indent=2))
+    return 1
+
+
+def cmd_notebooklm(args: argparse.Namespace) -> int:
+    if args.export:
+        payload = {"config_path": config_path(args)}
+        if args.package_path:
+            payload["package_path"] = args.package_path
+        if args.latest:
+            payload["latest"] = True
+        print(json.dumps(call_tool("export_notebooklm_sources", payload), indent=2))
+        return 0
+    print(json.dumps({"error": "Choose --export with --latest or --package <folder>."}, indent=2))
+    return 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -209,6 +252,10 @@ def main(argv: list[str] | None = None) -> int:
             return cmd_exhibit(args)
         if args.command == "clean":
             return cmd_clean(args)
+        if args.command == "research":
+            return cmd_research(args)
+        if args.command == "notebooklm":
+            return cmd_notebooklm(args)
     except PermissionError as exc:
         print(
             json.dumps(
@@ -222,7 +269,15 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 1
-    except (PipelineError, MediaDependencyError, TranscriptionDependencyError, PublishingGateError, OpenAIQualityError) as exc:
+    except (
+        PipelineError,
+        MediaDependencyError,
+        TranscriptionDependencyError,
+        PublishingGateError,
+        NotebookLMExportError,
+        OpenAIQualityError,
+        ResearchEnrichmentError,
+    ) as exc:
         print(json.dumps({"error": exc.__class__.__name__, "message": str(exc)}, indent=2), file=sys.stderr)
         return 1
     parser.error("Unknown command")

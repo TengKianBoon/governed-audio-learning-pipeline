@@ -75,10 +75,10 @@ def build_portfolio_index(config: AppConfig, package_dirs: list[Path]) -> str:
 <main>
   <header>
     <div class="eyebrow">{config.portfolio_initials} Portfolio Exhibit</div>
-    <h1>Enterprise AI Solutions Architecturing and Framework</h1>
+    <h1>Enterprise AI Solution Architecture &amp; Delivery Framework</h1>
     <p>Built by {config.portfolio_owner}. This GitHub-safe portfolio layer mirrors sanitized solution-architecture packages and the latest public framework map, while keeping raw audio and full transcripts outside the repository.</p>
     <div class="hero-links">
-      <a href="mindmap/enterprise_ai_mindmap.html">Open solutions framework map</a>
+      <a href="mindmap/enterprise_ai_mindmap.html">Open architecture framework map</a>
       <a href="mindmap/history/">Open framework history folder</a>
     </div>
   </header>

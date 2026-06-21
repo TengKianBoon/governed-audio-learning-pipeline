@@ -88,6 +88,6 @@ Recommended capability buckets:
 
 This app should be positioned as the first flagship system:
 
-**Enterprise AI Solutions Architecturing and Framework**
+**Enterprise AI Solution Architecture & Delivery Framework**
 
-It demonstrates local transcription, OpenAI-assisted synthesis, quality gates, cost controls, privacy-preserving publishing, MCP-ready orchestration, and an evolving public solutions framework map.
+It demonstrates local transcription, OpenAI-assisted synthesis, quality gates, cost controls, privacy-preserving publishing, MCP-ready orchestration, and an evolving public architecture and delivery framework map.

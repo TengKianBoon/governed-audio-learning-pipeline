@@ -19,6 +19,7 @@ class PipelineTest(unittest.TestCase):
                 [
                     f'sandbox_root: "{sandbox}"',
                     f'portfolio_public_root: "{Path(temp_dir) / "portfolio_public"}"',
+                    f'notebooklm_artifacts_root: "{Path(temp_dir) / "notebooklm_artifacts"}"',
                     "ffmpeg_path: \"\"",
                     "ffprobe_path: \"\"",
                     "whisper_command: \"whisper\"",
@@ -38,6 +39,7 @@ class PipelineTest(unittest.TestCase):
                 [
                     f'sandbox_root: "{sandbox}"',
                     f'portfolio_public_root: "{Path(temp_dir) / "portfolio_public"}"',
+                    f'notebooklm_artifacts_root: "{Path(temp_dir) / "notebooklm_artifacts"}"',
                     'ffmpeg_path: ""',
                     'ffprobe_path: ""',
                     'whisper_command: "whisper"',
@@ -63,8 +65,28 @@ class PipelineTest(unittest.TestCase):
             self.assertTrue((result.private_output_dir / "source_metadata.json").exists())
             self.assertTrue((result.private_output_dir / "original_transcript.md").exists())
             self.assertTrue((result.private_output_dir / "english_transcribed.md").exists())
+            self.assertTrue((result.private_output_dir / "summary.html").exists())
+            self.assertTrue((result.private_output_dir / "web_research_queries.md").exists())
+            self.assertTrue((result.private_output_dir / "web_research_queries.html").exists())
+            self.assertTrue((result.private_output_dir / "audio_podcast_script.md").exists())
+            self.assertTrue((result.private_output_dir / "notebooklm_package" / "notebooklm_handoff.md").exists())
+            self.assertTrue((result.private_output_dir / "notebooklm_package" / "deck_slides_prompt.md").exists())
+            self.assertTrue((result.private_output_dir / "notebooklm_package" / "infographic_prompt.md").exists())
+            self.assertTrue((result.private_output_dir / "notebooklm_package" / "audio_overview_prompt.md").exists())
             self.assertTrue((result.private_output_dir / "mindmap_ingest.md").exists())
             self.assertTrue((result.private_output_dir / "cost_budget.json").exists())
+            summary_html = (result.private_output_dir / "summary.html").read_text(encoding="utf-8")
+            research_html = (result.private_output_dir / "web_research_queries.html").read_text(encoding="utf-8")
+            metadata = json.loads((result.private_output_dir / "source_metadata.json").read_text(encoding="utf-8"))
+            notebooklm_dir = config.notebooklm_artifacts_root / f"{result.private_output_dir.name} NLM"
+            self.assertIn("Web-search this topic", summary_html)
+            self.assertIn("NotebookLM handoff", summary_html)
+            self.assertIn("https://www.google.com/search", research_html)
+            self.assertIn("delivery_artifacts", metadata)
+            self.assertTrue(notebooklm_dir.name.endswith(" NLM"))
+            self.assertTrue((notebooklm_dir / "original_transcript.md").exists())
+            self.assertTrue((notebooklm_dir / "summary.md").exists())
+            self.assertTrue((notebooklm_dir / "summary.html").exists())
 
     def test_mock_process_auto_applies_mindmap_delta_to_private_graph(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -171,6 +193,7 @@ class PipelineTest(unittest.TestCase):
             public_output = sanitize_package(result.private_output_dir, config.public_review_dir)
 
             self.assertTrue((public_output / "index.html").exists())
+            self.assertTrue((public_output / "summary.html").exists())
             self.assertTrue((public_output / "public_learning_note.html").exists())
             self.assertTrue((public_output / "mindmap_ingest.html").exists())
             self.assertTrue((public_output / "quality_gate.html").exists())
@@ -179,7 +202,8 @@ class PipelineTest(unittest.TestCase):
             index_html = (public_output / "index.html").read_text(encoding="utf-8")
             self.assertIn("TKB Public Review Package", index_html)
             self.assertIn("../../mindmap/enterprise_ai_mindmap.html", index_html)
-            self.assertIn("Back to Enterprise AI Solutions Framework", index_html)
+            self.assertIn("Back to Enterprise AI Architecture &amp; Delivery Framework", index_html)
+            self.assertIn("summary.html", index_html)
             self.assertIn("public_learning_note.html", index_html)
             self.assertIn("mindmap_ingest.html", index_html)
             self.assertIn("quality_gate.html", index_html)

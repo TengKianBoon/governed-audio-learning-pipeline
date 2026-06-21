@@ -1,3 +1,3 @@
 # Mindmap Ingest Suggestion
 
-- Category: Enterprise AI operating model / continuous learning. Fits in the post-deployment learning-loop stage. Before: use-case definition, workflow design, and initial model selection. After: feedback analysis, knowledge-base updates, portability testing, and policy refinement. Relationship cues: links real business outcomes, human judgment, and model-agnostic memory into a compounding system.
+- Category: AI operating model / learning systems. Fits in the stage where model usage becomes durable enterprise capability. Before: use case selection and success-metric definition. After: workflow instrumentation, feedback capture, and knowledge-base update design. Relationship cues: connect model portability, organizational memory, human-in-the-loop review, and business outcome metrics as one loop.

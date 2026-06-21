@@ -4,7 +4,7 @@ This project is designed as a public code repo, separate from private raw learni
 
 ## App Code Repo
 
-Run these inside `enterprise-ai-learning-audio-app` when your environment allows Git metadata writes:
+Run these inside `governed-audio-learning-pipeline` when your environment allows Git metadata writes:
 
 ```powershell
 git init -b main
@@ -35,7 +35,7 @@ The app now maintains a GitHub-safe mirror inside this repo:
 portfolio_public/
 ```
 
-Use that folder as the versioned exhibit layer for sanitized learning outputs and the evolving Enterprise AI solutions framework map.
+Use that folder as the versioned exhibit layer for sanitized learning outputs and the evolving Enterprise AI architecture and delivery framework map.
 
 Recommended Git workflow:
 

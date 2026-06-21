@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import shutil
+import subprocess
+import tempfile
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -76,7 +80,37 @@ def _request_responses(
     reasoning_effort: str,
     max_output_tokens: int,
     purpose: str,
+    tools: list[dict] | None = None,
+    tool_choice: str | dict | None = None,
+    include: list[str] | None = None,
 ) -> str:
+    return _extract_output_text(
+        request_responses_payload(
+            prompt,
+            config,
+            model=model,
+            reasoning_effort=reasoning_effort,
+            max_output_tokens=max_output_tokens,
+            purpose=purpose,
+            tools=tools,
+            tool_choice=tool_choice,
+            include=include,
+        )
+    )
+
+
+def request_responses_payload(
+    prompt: str,
+    config: AppConfig,
+    *,
+    model: str,
+    reasoning_effort: str,
+    max_output_tokens: int,
+    purpose: str,
+    tools: list[dict] | None = None,
+    tool_choice: str | dict | None = None,
+    include: list[str] | None = None,
+) -> dict:
     request_body = {
         "model": model,
         "input": prompt,
@@ -84,7 +118,14 @@ def _request_responses(
         "max_output_tokens": max_output_tokens,
         "store": False,
     }
-    data = json.dumps(request_body).encode("utf-8")
+    if tools:
+        request_body["tools"] = tools
+    if tool_choice:
+        request_body["tool_choice"] = tool_choice
+    if include:
+        request_body["include"] = include
+    data_text = json.dumps(request_body)
+    data = data_text.encode("utf-8")
     headers = {
         "Authorization": f"Bearer {_api_key(config)}",
         "Content-Type": "application/json",
@@ -93,21 +134,111 @@ def _request_responses(
     attempts = max(1, config.max_retries)
     last_error = ""
     for attempt in range(1, attempts + 1):
-        request = Request(OPENAI_RESPONSES_URL, data=data, headers=headers, method="POST")
+        retry_delay_seconds: float | None = None
         try:
-            with urlopen(request, timeout=config.openai_request_timeout_seconds) as response:
-                payload = json.loads(response.read().decode("utf-8"))
-                return _extract_output_text(payload)
+            if shutil.which("curl.exe") or shutil.which("curl"):
+                status_code, response_text = _post_json_with_curl(
+                    data_text,
+                    headers,
+                    timeout_seconds=config.openai_request_timeout_seconds,
+                )
+                if 200 <= status_code < 300:
+                    return json.loads(response_text)
+                last_error = f"HTTP {status_code}: {response_text[:800]}"
+                if status_code == 429:
+                    match = re.search(r"try again in\s+([0-9.]+)s", response_text, flags=re.IGNORECASE)
+                    if match:
+                        retry_delay_seconds = float(match.group(1))
+            else:
+                request = Request(OPENAI_RESPONSES_URL, data=data, headers=headers, method="POST")
+                with urlopen(request, timeout=config.openai_request_timeout_seconds) as response:
+                    payload = json.loads(response.read().decode("utf-8"))
+                    return payload
         except HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
             last_error = f"HTTP {exc.code}: {detail[:800]}"
+            if exc.code == 429:
+                retry_after = exc.headers.get("Retry-After")
+                if retry_after:
+                    try:
+                        retry_delay_seconds = float(retry_after)
+                    except ValueError:
+                        retry_delay_seconds = None
+                if retry_delay_seconds is None:
+                    match = re.search(r"try again in\s+([0-9.]+)s", detail, flags=re.IGNORECASE)
+                    if match:
+                        retry_delay_seconds = float(match.group(1))
         except (URLError, TimeoutError, json.JSONDecodeError) as exc:
             last_error = str(exc)
         if attempt < attempts:
-            time.sleep(config.retry_backoff_seconds * attempt)
+            delay = retry_delay_seconds if retry_delay_seconds is not None else config.retry_backoff_seconds * attempt
+            time.sleep(max(delay + 1.0, config.retry_backoff_seconds * attempt))
     raise OpenAIQualityError(
         f"OpenAI Responses API failed during {purpose} after {attempts} attempt(s). {last_error}"
     )
+
+
+def _curl_config_value(value: str) -> str:
+    return '"' + value.replace("\\", "/").replace('"', '\\"') + '"'
+
+
+def _post_json_with_curl(data_text: str, headers: dict[str, str], *, timeout_seconds: int) -> tuple[int, str]:
+    curl = shutil.which("curl.exe") or shutil.which("curl")
+    if not curl:
+        raise URLError("curl is not available")
+
+    temp_paths: list[str] = []
+    try:
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".json", delete=False) as body_file:
+            body_file.write(data_text)
+            body_path = body_file.name
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".json", delete=False) as response_file:
+            response_path = response_file.name
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".curl", delete=False) as config_file:
+            config_path = config_file.name
+            config_lines = [
+                "silent",
+                "show-error",
+                "ssl-no-revoke",
+                f"max-time = {timeout_seconds}",
+                f"url = {_curl_config_value(OPENAI_RESPONSES_URL)}",
+                'request = "POST"',
+                f"data-binary = {_curl_config_value('@' + body_path)}",
+                f"output = {_curl_config_value(response_path)}",
+                'write-out = "%{http_code}"',
+            ]
+            for key, value in headers.items():
+                config_lines.append(f"header = {_curl_config_value(f'{key}: {value}')}")
+            config_file.write("\n".join(config_lines))
+        temp_paths.extend([body_path, response_path, config_path])
+
+        completed = subprocess.run(
+            [curl, "--config", config_path],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        response_text = ""
+        response_file_path = tempfile.Path(response_path) if hasattr(tempfile, "Path") else None
+        if response_file_path is None:
+            with open(response_path, encoding="utf-8", errors="replace") as response_handle:
+                response_text = response_handle.read()
+        else:
+            response_text = response_file_path.read_text(encoding="utf-8", errors="replace")
+
+        if completed.returncode != 0:
+            raise URLError(completed.stderr.strip() or completed.stdout.strip() or "curl request failed")
+        try:
+            status_code = int(completed.stdout.strip()[-3:])
+        except ValueError as exc:
+            raise URLError(f"curl did not return an HTTP status code: {completed.stdout!r}") from exc
+        return status_code, response_text
+    finally:
+        for path in temp_paths:
+            try:
+                os.unlink(path)
+            except OSError:
+                pass
 
 
 def extract_mindmap_ingest_suggestion(summary_text: str) -> str:
@@ -174,7 +305,7 @@ def build_quality_summary(
     if mock:
         return build_summary_markdown(source_text, source_name)
 
-    prompt = f"""You are helping Teng Kian Boon curate an Enterprise AI solutions architecturing and framework.
+    prompt = f"""You are helping Teng Kian Boon curate an Enterprise AI solution architecture and delivery framework.
 
 Create a high-quality public-review learning summary from the source transcript below.
 The source transcript may be English, Simplified Chinese, Traditional Chinese, or a mixed speech-to-text transcript.

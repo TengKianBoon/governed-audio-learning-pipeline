@@ -23,6 +23,17 @@ def update_processed_registry(state_dir: Path, fingerprint: str, slug: str, pack
     path.write_text(json.dumps(registry, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def get_processed_record(state_dir: Path, fingerprint: str) -> dict | None:
+    path = state_dir / "processed_files.json"
+    registry = _read_json(path, {"processed": {}})
+    record = registry.get("processed", {}).get(fingerprint)
+    return record if isinstance(record, dict) else None
+
+
+def is_fingerprint_processed(state_dir: Path, fingerprint: str) -> bool:
+    return get_processed_record(state_dir, fingerprint) is not None
+
+
 def update_learning_registry(state_dir: Path, slug: str, source_name: str, package_dir: Path, score: int) -> None:
     path = state_dir / "learning_registry.json"
     registry = _read_json(path, {"learnings": []})

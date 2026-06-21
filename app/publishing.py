@@ -23,6 +23,7 @@ SYSTEM_METADATA_NAMES = {
 
 MANAGED_PUBLIC_FILES = {
     "summary.md",
+    "summary.html",
     "mindmap_ingest.md",
     "quality_score.json",
     "mindmap_delta.json",
@@ -33,6 +34,10 @@ MANAGED_PUBLIC_FILES = {
     "mindmap_ingest.html",
     "quality_gate.html",
     "source_metadata.html",
+    "research_enriched_report.md",
+    "research_enriched_report.html",
+    "research_sources.json",
+    "research_enrichment_status.json",
 }
 
 BLOCKED_EXTS = {".m4a", ".mp3", ".aac", ".wav", ".flac", ".amr", ".3gp", ".ogg", ".opus", ".mp4", ".mkv", ".webm", ".mov"}
@@ -116,7 +121,7 @@ def _public_tone_cleanup(markdown: str) -> str:
         "Portfolio Note": "Public Practice Note",
         "portfolio-ready": "public-exhibit ready",
         "final portfolio story": "final public learning narrative",
-        "Enterprise AI learning portfolio": "Enterprise AI solutions architecturing and framework",
+        "Enterprise AI learning portfolio": "Enterprise AI solution architecture and delivery framework",
         "practical FDE thinking": "practical deployment thinking",
     }
     cleaned = markdown
@@ -167,7 +172,7 @@ def build_public_note(private_package_dir: Path, owner_name: str = "Teng Kian Bo
     reviewed_summary = build_review_summary(private_package_dir, quality)
     return (
         "# Public Learning Note\n\n"
-        f"Built and reviewed by {owner_name} as part of an Enterprise AI solutions architecturing and framework. "
+        f"Built and reviewed by {owner_name} as part of an Enterprise AI solution architecture and delivery framework. "
         "AI tools assist transcription and structuring; the technical synthesis and public release remain operator-reviewed.\n\n"
         f"## Release Status\n\n{_release_status(quality)}\n\n"
         f"{reviewed_summary}\n\n"
@@ -250,12 +255,24 @@ def build_public_note_html(private_package_dir: Path, owner_name: str, quality: 
     )
 
 
+def build_summary_review_html(private_package_dir: Path, quality: dict) -> str:
+    summary = build_review_summary(private_package_dir, quality)
+    body = (
+        '<section class="panel">'
+        "<p>This is the sanitized HTML reading layer for the learning summary. "
+        "It is generated from the public-review summary, not from raw audio or full private transcripts.</p>"
+        f"{_markdown_to_html(summary)}"
+        "</section>"
+    )
+    return _page_shell("Learning Summary", "Sanitized summary layer", body)
+
+
 def build_mindmap_ingest_html(private_package_dir: Path) -> str:
     ingest_path = private_package_dir / "mindmap_ingest.md"
     ingest = ingest_path.read_text(encoding="utf-8") if ingest_path.exists() else "Mindmap placement suggestion pending."
     body = (
         '<section class="panel">'
-        "<p>This page explains how the learning is intended to fit into the Enterprise AI solutions framework map. "
+        "<p>This page explains how the learning is intended to fit into the Enterprise AI solution architecture and delivery framework map. "
         "The map update itself remains a zero-cost local step based on the reviewed summary, not the raw transcript.</p>"
         f"{_markdown_to_html(ingest)}"
         "</section>"
@@ -314,7 +331,13 @@ def build_source_metadata_html(public_metadata: dict) -> str:
     return _page_shell("Source Context", "Sanitized metadata", body)
 
 
-def build_public_index(slug: str, quality: dict, owner_name: str = "Teng Kian Boon") -> str:
+def build_public_index(
+    slug: str,
+    quality: dict,
+    owner_name: str = "Teng Kian Boon",
+    *,
+    has_research_report: bool = False,
+) -> str:
     status = _release_status(quality)
     status_class = "pass" if quality.get("passed") else "warn"
     score = quality.get("score", "unknown")
@@ -323,11 +346,21 @@ def build_public_index(slug: str, quality: dict, owner_name: str = "Teng Kian Bo
     all_findings = list(findings) + list(summary_findings)
     finding_text = ", ".join(str(finding) for finding in all_findings) if all_findings else "No findings recorded."
     cards = [
+        ("Learning Summary", "The sanitized summary in HTML form for normal reading.", "summary.html"),
         ("Public Learning Note", "The human-readable learning page to open first.", "public_learning_note.html"),
-        ("Framework Placement", "How this learning should connect into the Enterprise AI solutions framework.", "mindmap_ingest.html"),
+        ("Framework Placement", "How this learning should connect into the Enterprise AI solution architecture and delivery framework.", "mindmap_ingest.html"),
         ("Quality Gate", "Plain-language status for completeness, privacy, and transcript quality.", "quality_gate.html"),
         ("Source Context", "Sanitized source metadata with raw/private details withheld.", "source_metadata.html"),
     ]
+    if has_research_report:
+        cards.insert(
+            1,
+            (
+                "Research-Enriched Report",
+                "Vendor/web-evidence enriched report with citations and enterprise practice implications.",
+                "research_enriched_report.html",
+            ),
+        )
     card_html = "\n".join(
         f"""
       <a class="card" href="{html.escape(filename)}">
@@ -364,7 +397,7 @@ def build_public_index(slug: str, quality: dict, owner_name: str = "Teng Kian Bo
 <body>
 <main>
   <nav class="top-nav" aria-label="Package navigation">
-    <a href="../../mindmap/enterprise_ai_mindmap.html">Back to Enterprise AI Solutions Framework</a>
+    <a href="../../mindmap/enterprise_ai_mindmap.html">Back to Enterprise AI Architecture &amp; Delivery Framework</a>
   </nav>
   <header>
     <div class="eyebrow">TKB Public Review Package</div>
@@ -463,6 +496,7 @@ def sanitize_package(private_package_dir: Path, public_review_root: Path, owner_
             shutil.copy2(src, output / name)
 
     write_text(output / "summary.md", build_review_summary(private_package_dir, quality))
+    write_text(output / "summary.html", build_summary_review_html(private_package_dir, quality))
 
     metadata_path = private_package_dir / "source_metadata.json"
     public_metadata = {
@@ -500,7 +534,36 @@ def sanitize_package(private_package_dir: Path, public_review_root: Path, owner_
     write_text(output / "mindmap_ingest.html", build_mindmap_ingest_html(private_package_dir))
     write_text(output / "quality_gate.html", build_quality_gate_html(quality))
     write_text(output / "source_metadata.html", build_source_metadata_html(public_metadata))
-    write_text(output / "index.html", build_public_index(slug, quality, owner_name=owner_name))
+    has_research_report = False
+    research_status_path = private_package_dir / "research_enrichment_status.json"
+    if research_status_path.exists():
+        try:
+            research_status = json.loads(research_status_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            research_status = {"passed": False}
+        if research_status.get("passed") and (private_package_dir / "research_enriched_report.md").exists():
+            for name in ("research_enriched_report.md", "research_enriched_report.html", "research_sources.json"):
+                src = private_package_dir / name
+                if src.exists():
+                    shutil.copy2(src, output / name)
+            public_research_status = {
+                "topic": research_status.get("topic"),
+                "generated_at": research_status.get("generated_at"),
+                "provider": research_status.get("provider"),
+                "model": research_status.get("model"),
+                "reasoning_effort": research_status.get("reasoning_effort"),
+                "source_count": research_status.get("source_count"),
+                "word_count": research_status.get("word_count"),
+                "passed": research_status.get("passed"),
+                "findings": research_status.get("findings", []),
+                "cost_note": research_status.get("cost_note"),
+            }
+            (output / "research_enrichment_status.json").write_text(
+                json.dumps(public_research_status, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            has_research_report = True
+    write_text(output / "index.html", build_public_index(slug, quality, owner_name=owner_name, has_research_report=has_research_report))
     assert_public_safe(output)
     return output
 

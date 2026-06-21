@@ -1,6 +1,6 @@
 # Public Learning Note
 
-Built and reviewed by Teng Kian Boon as part of an Enterprise AI solutions architecturing and framework. AI tools assist transcription and structuring; the technical synthesis and public release remain operator-reviewed.
+Built and reviewed by Teng Kian Boon as part of an Enterprise AI solution architecture and delivery framework. AI tools assist transcription and structuring; the technical synthesis and public release remain operator-reviewed.
 
 ## Release Status
 

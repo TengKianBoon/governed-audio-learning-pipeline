@@ -2,9 +2,10 @@
 # paths.local.yaml is ignored by Git so private machine paths stay private.
 
 sandbox_root: "../../AI Learnings Audio App"
+notebooklm_artifacts_root: "../../AI Learning Artifacts Gen NotebookLM"
 portfolio_owner: "Teng Kian Boon"
 portfolio_initials: "TKB"
-portfolio_tagline: "Enterprise AI solutions architecturing and framework built with OpenAI-assisted synthesis, operator review, cost controls, and privacy-preserving publishing."
+portfolio_tagline: "Enterprise AI solution architecture and delivery framework built with OpenAI-assisted synthesis, operator review, cost controls, and privacy-preserving publishing."
 
 # Paste real paths here after locating ffmpeg.exe and ffprobe.exe.
 ffmpeg_path: "C:/path/to/ffmpeg.exe"
@@ -34,6 +35,12 @@ openai_translation_max_output_tokens: 6000
 openai_summary_model: "gpt-5.4-mini"
 openai_summary_reasoning_effort: "high"
 openai_summary_max_output_tokens: 20000
+openai_research_model: "gpt-5.4-mini"
+openai_research_reasoning_effort: "high"
+openai_research_max_output_tokens: 9000
+openai_research_search_context_size: "medium"
+openai_research_return_token_budget: "default"
+openai_research_allowed_domains: "openai.com,anthropic.com,microsoft.com,google.com,googlecloud.com,cloud.google.com,aws.amazon.com,oracle.com,sap.com,salesforce.com,servicenow.com,palantir.com,databricks.com,snowflake.com,nvidia.com,ibm.com,accenture.com,deloitte.com,cohere.com,mistral.ai,huggingface.co,langchain.com,cursor.com,ycombinator.com"
 openai_quality_model: "gpt-5.4-mini"
 openai_reasoning_effort: "high"
 openai_max_output_tokens: 20000

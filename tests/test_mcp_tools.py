@@ -16,6 +16,7 @@ class McpToolsTest(unittest.TestCase):
                 [
                     f'sandbox_root: "{sandbox}"',
                     f'portfolio_public_root: "{Path(temp_dir) / "portfolio_public"}"',
+                    f'notebooklm_artifacts_root: "{Path(temp_dir) / "notebooklm_artifacts"}"',
                     'ffmpeg_path: ""',
                     'ffprobe_path: ""',
                     'whisper_command: ".venv/Scripts/whisper.exe"',

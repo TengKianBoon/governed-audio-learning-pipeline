@@ -8,18 +8,20 @@ from .config import ensure_sandbox_dirs, load_config
 from .doctor import run_doctor
 from .exhibit_audit import audit_public_exhibits as run_public_exhibit_audit
 from .mindmap import apply_delta, evaluate_delta, load_graph, render_mindmap_html, save_graph
+from .notebooklm_export import export_notebooklm_sources
 from .pipeline import process_file
 from .portfolio_export import export_portfolio_public
 from .providers import provider_policy
 from .publishing import sanitize_all
 from .quality import write_quality_score
+from .research_enrichment import enrich_learning_research, latest_learning_package
 
 
 def tool_schemas() -> list[dict]:
     return [
         {
             "name": "process_learning_audio",
-            "description": "Process one local audio/video file or text transcript into private transcripts, OpenAI quality summary, cost budget, quality score, and mindmap delta.",
+            "description": "Process one local audio/video file or text transcript into private transcripts, OpenAI quality summary, HTML summary, podcast script, NotebookLM handoff package, cost budget, quality score, and mindmap delta.",
             "input_schema": {
                 "type": "object",
                 "properties": {
@@ -100,6 +102,31 @@ def tool_schemas() -> list[dict]:
                     "config_path": {"type": "string"},
                     "processing_stale_days": {"type": "integer", "default": 14},
                     "oversized_archive_mb": {"type": "integer", "default": 500},
+                },
+            },
+        },
+        {
+            "name": "enrich_learning_research",
+            "description": "Use OpenAI Responses web_search to upgrade one private summary into a cited research-enriched report, HTML report, research podcast script, and NotebookLM source bundle.",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "config_path": {"type": "string"},
+                    "package_path": {"type": "string"},
+                    "latest": {"type": "boolean", "default": False},
+                    "mock": {"type": "boolean", "default": False},
+                },
+            },
+        },
+        {
+            "name": "export_notebooklm_sources",
+            "description": "Copy original transcript, summary.md, and summary.html into the private NotebookLM source handoff folder for one learning package.",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "config_path": {"type": "string"},
+                    "package_path": {"type": "string"},
+                    "latest": {"type": "boolean", "default": False},
                 },
             },
         },
@@ -266,6 +293,30 @@ def plan_workspace_cleanup(arguments: dict | None = None) -> dict:
     )
 
 
+def enrich_learning_research_tool(arguments: dict | None = None) -> dict:
+    arguments = arguments or {}
+    config = load_config(arguments.get("config_path"))
+    ensure_sandbox_dirs(config)
+    package_arg = arguments.get("package_path")
+    if package_arg:
+        package_dir = Path(str(package_arg)).expanduser().resolve()
+    else:
+        package_dir = latest_learning_package(config)
+    return enrich_learning_research(package_dir, config, mock=bool(arguments.get("mock", False)))
+
+
+def export_notebooklm_sources_tool(arguments: dict | None = None) -> dict:
+    arguments = arguments or {}
+    config = load_config(arguments.get("config_path"))
+    ensure_sandbox_dirs(config)
+    package_arg = arguments.get("package_path")
+    if package_arg:
+        package_dir = Path(str(package_arg)).expanduser().resolve()
+    else:
+        package_dir = latest_learning_package(config)
+    return export_notebooklm_sources(package_dir, config)
+
+
 TOOLS = {
     "process_learning_audio": process_learning_audio,
     "review_learning_mindmap": review_learning_mindmap,
@@ -276,6 +327,8 @@ TOOLS = {
     "doctor_check": doctor_check,
     "audit_public_exhibits": audit_public_exhibits,
     "plan_workspace_cleanup": plan_workspace_cleanup,
+    "enrich_learning_research": enrich_learning_research_tool,
+    "export_notebooklm_sources": export_notebooklm_sources_tool,
 }
 
 

@@ -42,7 +42,7 @@ Reviewers should see:
 
 ## Target Level
 
-Public positioning target: **7.5/10 Enterprise AI builder**.
+Public positioning target: **mid-to-senior Enterprise AI builder**.
 
 The evidence should show that Teng Kian Boon can design, operate, and improve AI-assisted systems with the judgment expected in enterprise AI solution architecture and deployment leadership:
 

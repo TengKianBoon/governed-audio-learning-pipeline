@@ -11,9 +11,9 @@ from .utils import utc_now_iso, write_text
 
 DEFAULT_GRAPH = {"nodes": [], "edges": [], "updated_at": None}
 
-FRAMEWORK_TITLE = "Enterprise AI Solutions Architecturing and Framework"
-FRAMEWORK_OWNER_LABEL = "TKB Enterprise AI Solutions Framework"
-FRAMEWORK_SHORT_LABEL = "Enterprise AI Solutions Framework"
+FRAMEWORK_TITLE = "Enterprise AI Solution Architecture & Delivery Framework"
+FRAMEWORK_OWNER_LABEL = "TKB Enterprise AI Architecture & Delivery Framework"
+FRAMEWORK_SHORT_LABEL = "Enterprise AI Architecture & Delivery Framework"
 FRAMEWORK_TAGLINE = (
     "Enterprise AI solution architecture, application design, governance, and delivery framework "
     "built from reviewed learning inputs, OpenAI-assisted synthesis, operator review, cost controls, "
@@ -685,7 +685,7 @@ def render_mindmap_html(
     <aside class="detail-panel" id="detail-panel" style="--detail-accent:#0f766e">
       <h2 id="detail-title">No topic selected</h2>
       <span class="detail-stage" id="detail-stage">Framework branch</span>
-      <p id="detail-summary">Reviewed concepts appear here as the Enterprise AI solutions framework grows over time.</p>
+      <p id="detail-summary">Reviewed concepts appear here as the Enterprise AI solution architecture and delivery framework grows over time.</p>
       <div class="link-list" id="detail-links"></div>
     </aside>
   </section>
@@ -720,7 +720,7 @@ function selectNode(id) {{
   document.getElementById('detail-title').textContent = node.label;
   document.getElementById('detail-stage').textContent = node.stage_label;
   document.getElementById('detail-summary').textContent =
-    node.label + ' is mapped into the ' + node.stage_label + ' branch of the Enterprise AI solutions architecture framework. ' +
+    node.label + ' is mapped into the ' + node.stage_label + ' branch of the Enterprise AI solution architecture and delivery framework. ' +
     node.evidence_count + ' internal evidence package(s) are tracked privately but not exposed in this public view.';
   document.getElementById('detail-links').innerHTML =
     '<h3>Public review packages</h3>' + linkMarkup(node.public_links);

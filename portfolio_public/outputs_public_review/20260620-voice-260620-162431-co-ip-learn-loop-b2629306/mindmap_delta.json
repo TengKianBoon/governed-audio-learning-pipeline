@@ -2,7 +2,6 @@
   "learning_slug": "20260620-voice-260620-162431-co-ip-learn-loop-b2629306",
   "concepts": [
     "agent",
-    "orchestration",
     "workflow",
     "workflows",
     "quality",
@@ -10,6 +9,7 @@
     "enterprise",
     "architecture",
     "transcript",
+    "translation",
     "mindmap",
     "vendor",
     "provider",
@@ -19,12 +19,11 @@
     "research",
     "governance",
     "model",
-    "learning",
-    "company"
+    "company",
+    "learning"
   ],
   "overlaps": [
     "agent",
-    "orchestration",
     "workflow",
     "workflows",
     "quality",
@@ -33,24 +32,25 @@
     "architecture",
     "transcript",
     "mindmap",
+    "vendor",
+    "provider",
+    "privacy",
     "cost",
     "human review",
     "research",
     "governance",
     "model",
+    "company",
     "learning"
   ],
   "novel": [
-    "vendor",
-    "provider",
-    "privacy",
-    "company"
+    "translation"
   ],
-  "overlap_score": 0.8,
-  "novelty_score": 0.2,
+  "overlap_score": 0.95,
+  "novelty_score": 0.05,
   "recommendation": "update",
   "review_required": true,
-  "mindmap_ingest_suggestion": "- Category: Enterprise AI operating model / continuous learning. Fits in the post-deployment learning-loop stage. Before: use-case definition, workflow design, and initial model selection. After: feedback analysis, knowledge-base updates, portability testing, and policy refinement. Relationship cues: links real business outcomes, human judgment, and model-agnostic memory into a compounding system.",
+  "mindmap_ingest_suggestion": "- Category: AI operating model / learning systems. Fits in the stage where model usage becomes durable enterprise capability. Before: use case selection and success-metric definition. After: workflow instrumentation, feedback capture, and knowledge-base update design. Relationship cues: connect model portability, organizational memory, human-in-the-loop review, and business outcome metrics as one loop.",
   "mindmap_source": "summary.md + mindmap_ingest.md",
   "mindmap_cost": "zero; local rule-based update from summary-level text",
   "auto_applied_private_graph": true

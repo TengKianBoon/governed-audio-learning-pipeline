@@ -1,6 +1,6 @@
 ---
 name: transcribe-audio
-description: Transcribe local phone recordings or video-derived audio for the Enterprise AI Learning Audio App. Use when processing .m4a, .mp3, .wav, .mp4, or long seminar files into original-language transcript markdown with timestamps and privacy-safe metadata.
+description: Transcribe local phone recordings or video-derived audio for the Governed Audio Learning Pipeline. Use when processing .m4a, .mp3, .wav, .mp4, or long seminar files into original-language transcript markdown with timestamps and privacy-safe metadata.
 ---
 
 # Transcribe Audio

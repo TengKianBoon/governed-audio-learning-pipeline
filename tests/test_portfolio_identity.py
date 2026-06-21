@@ -15,7 +15,7 @@ class PortfolioIdentityTest(unittest.TestCase):
             render_mindmap_html({"nodes": [], "edges": [], "updated_at": None}, output)
             html = output.read_text(encoding="utf-8")
             self.assertIn("Built by Teng Kian Boon", html)
-            self.assertIn("TKB Enterprise AI Solutions Framework", html)
+            self.assertIn("TKB Enterprise AI Architecture &amp; Delivery Framework", html)
             self.assertIn("AI tools assist synthesis and formatting", html)
 
     def test_public_note_centers_tkb_and_operator_review_without_hiring_language(self) -> None:
@@ -25,7 +25,7 @@ class PortfolioIdentityTest(unittest.TestCase):
             (package / "summary.md").write_text("# Summary\n\nLearning content.", encoding="utf-8")
             note = build_public_note(package)
             self.assertIn("Built and reviewed by Teng Kian Boon", note)
-            self.assertIn("Enterprise AI solutions architecturing and framework", note)
+            self.assertIn("Enterprise AI solution architecture and delivery framework", note)
             self.assertIn("operator-reviewed", note)
             self.assertNotIn("hiring", note.lower())
             self.assertNotIn("FDE", note)

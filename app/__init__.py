@@ -1,3 +1,3 @@
-"""Enterprise AI Learning Audio App."""
+"""Governed Audio Learning Pipeline."""
 
 __version__ = "0.1.0"

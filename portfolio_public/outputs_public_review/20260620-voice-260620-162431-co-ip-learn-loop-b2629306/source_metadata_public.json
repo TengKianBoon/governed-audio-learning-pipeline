@@ -13,6 +13,6 @@
   "openai_summary_reasoning_effort": "high",
   "mindmap_source": "summary.md + mindmap_ingest.md",
   "mindmap_cost": "zero; local rule-based update from summary-level text",
-  "processed_at": "2026-06-20T09:41:39+00:00",
+  "processed_at": "2026-06-20T16:24:56+00:00",
   "privacy": "raw source and full transcripts withheld"
 }
