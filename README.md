@@ -14,6 +14,18 @@ Local-first pipeline that turns spoken content - Chinese or English voice record
 
 The code repository is intended to be public. Raw audio, full transcripts, and private source material stay outside the repo. Inputs are limited to content the operator has the right to process: own voice notes, permitted talks and lectures, and self-generated transcripts.
 
+## Why I built it
+
+I wanted spoken material — my own recordings, permitted talks, phone transcripts — to become durable knowledge instead of files I never open again. The hard part was never transcription. It was making certain that nothing private or unlicensed could reach anything published.
+
+**The decisions that shaped it:**
+
+- **Private raw, public curated.** Audio, full transcripts and source material stay outside this repository by design. Only sanitised, reviewed output can ever be published.
+- **A rights boundary on the inputs.** Limited to material I have the right to process: my own voice notes, permitted talks and lectures, and self-generated transcripts.
+- **Cost and quality gates at every stage,** with a human approval step before anything leaves the system.
+
+I designed the separation, the gates and the review package. The implementation was AI-assisted, against acceptance criteria I wrote.
+
 ## What It Demonstrates
 
 Mid-to-senior enterprise AI engineering practice in a small, operable system: private raw-data control, an OpenAI-centered quality layer, MCP-ready tools, explicit cost and quality gates, and human approval before anything is published.
