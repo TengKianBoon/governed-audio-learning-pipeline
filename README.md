@@ -16,19 +16,19 @@ The code repository is intended to be public. Raw audio, full transcripts, and p
 
 ## Why I built it
 
-I wanted spoken material — my own recordings, permitted talks, phone transcripts — to become durable knowledge instead of files I never open again. The hard part was never transcription. It was making certain that nothing private or unlicensed could reach anything published.
+I wanted spoken material — my own recordings, permitted talks, phone transcripts — to become durable knowledge instead of files I never open again. I built the workflow around permitted inputs, private source storage, inspectable processing stages and deliberate review before public release.
 
 **The decisions that shaped it:**
 
-- **Private raw, public curated.** Audio, full transcripts and source material stay outside this repository by design. Only sanitised, reviewed output can ever be published.
+- **Private raw, public curated.** Audio, full transcripts and source material stay outside this repository by design. Public releases are prepared through sanitisation and a human review gate.
 - **A rights boundary on the inputs.** Limited to material I have the right to process: my own voice notes, permitted talks and lectures, and self-generated transcripts.
-- **Cost and quality gates at every stage,** with a human approval step before anything leaves the system.
+- **Cost and quality gates across processing stages,** with a human approval step before public release.
 
-I designed the separation, the gates and the review package. The implementation was AI-assisted, against acceptance criteria I wrote.
+I built this learning workflow through AI-assisted implementation, defining input handling, processing stages, tool contracts, cost controls and the review package.
 
 ## What It Demonstrates
 
-Mid-to-senior enterprise AI engineering practice in a small, operable system: private raw-data control, an OpenAI-centered quality layer, MCP-ready tools, explicit cost and quality gates, and human approval before anything is published.
+Hands-on AI workflow implementation: media conversion and chunking, transcription and synthesis, reusable tool contracts, private data handling, cost controls, bounded retries and reviewed publishing. The [processing code](app/), [tests](tests/) and operating runbooks make these mechanisms inspectable.
 
 ## Operator Quick Start
 
@@ -166,7 +166,7 @@ See `docs/github-showcase-standard.md` for the reusable checklist and maturity l
 
 ## Portfolio Positioning
 
-This project signals applied enterprise AI engineering judgment: not just prompting, not platform theater, but a controlled Enterprise AI solution architecture and delivery framework with real governance.
+This project connects hands-on application development, AI-assisted processing and governed publication through inspectable workflows and operational controls.
 
 It demonstrates:
 
@@ -181,6 +181,6 @@ It demonstrates:
 - long-term memory as repo artifacts
 - privacy-preserving publishing
 
-The public story is: **the operator designs and runs the pipeline; OpenAI and Whisper assist execution under human review, cost controls, quality gates, and privacy-preserving publishing.**
+The operating workflow is: **the operator designs and runs the pipeline; OpenAI and Whisper assist execution under human review, cost controls, quality gates, and privacy-preserving publishing.**
 
 See `AGENTS.md`, `docs/real-audio-setup.md`, `docs/enterprise-readiness.md`, `docs/mcp-orchestration.md`, `docs/agent-contracts.md`, `docs/git-versioning.md`, and `docs/adr/`.
